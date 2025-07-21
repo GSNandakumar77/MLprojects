@@ -26,7 +26,7 @@ class ModelTrainer:
             self.model_trainer_config=ModelTrainer_Config()
 
     def initiaite_model_training(self,train_arry,test_array):
-         try:
+        try:
                 logging.info("Split training and test input data")
                 X_train,Y_train,X_test,Y_test=(
                    
@@ -47,9 +47,60 @@ class ModelTrainer:
                     "XGBclassifier":XGBRegressor(),
                     "CatBoosting":CatBoostRegressor(verbose=False),
                     "Adaboosting":AdaBoostRegressor()}
-              
+                params = {
+    "Random Forest": {
+        "n_estimators": [100, 200],
+        "max_depth": [None, 10, 20],
+        "min_samples_split": [2, 5],
+        "min_samples_leaf": [1, 2],
+    },
+
+    "Decision Tree": {
+        "max_depth": [None, 10, 20],
+        "min_samples_split": [2, 5, 10],
+        "min_samples_leaf": [1, 2, 4],
+    },
+
+    "Gradient Boosting": {
+        "n_estimators": [100, 200],
+        "learning_rate": [0.01, 0.1],
+        "max_depth": [3, 5],
+        "subsample": [0.8, 1.0],
+    },
+
+    "Linear Regression": {
+        # No significant hyperparameters to tune with basic LinearRegression
+    },
+
+    "K-Neighbor Regressor": {
+        "n_neighbors": [3, 5, 7],
+        "weights": ["uniform", "distance"],
+        "algorithm": ["auto", "ball_tree", "kd_tree"],
+    },
+
+    "XGBclassifier": {  # Actually you're using XGBRegressor, rename for clarity
+        "n_estimators": [100, 200],
+        "learning_rate": [0.01, 0.1],
+        "max_depth": [3, 5, 7],
+        "subsample": [0.8, 1],
+    },
+
+    "CatBoosting": {
+        "iterations": [100, 200],
+        "depth": [4, 6, 8],
+        "learning_rate": [0.01, 0.1],
+    },
+
+    "Adaboosting": {
+        "n_estimators": [50, 100],
+        "learning_rate": [0.01, 0.1, 1.0],
+    }
+}
+
+
+        
                 """ type hinting in Python."""
-                model_report:dict=evaluate_model(X_train,Y_train,X_test,Y_test,models)
+                model_report:dict=evaluate_model(X_train,Y_train,X_test,Y_test,models,params)
                 "best_score"
                 best_score=max(sorted(model_report.values()))
                 "best_model_name"
@@ -70,5 +121,5 @@ class ModelTrainer:
                 r2_square=r2_score(Y_test,predicted)
                 return r2_square
                
-         except Exception as e:
-              raise CustomException(e,sys)
+        except Exception as e:
+            raise CustomException(e,sys)
