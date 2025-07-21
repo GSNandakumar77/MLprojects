@@ -46,10 +46,15 @@ class Person:
 | `os.rename()`      | Rename file/folder        |
 '''
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 @dataclass
 class DataIngestionConfig:
     """1.The @dataclass only defines paths — it doesn’t create anything
-     2. data class just hold values of the variables """
+     2. data class just hold values of the variables 
+     3.this is like input like a=10,
+     b=20   """
     train_data_path=os.path.join("artifacts",'train_data.csv')## It doesn’t create any folders. It’s just telling Python, “Here’s where I want to save my training data later.”
     test_data_path=os.path.join("artifacts",'test_data.csv')
     raw_data_path=os.path.join("artifacts",'raw_data.csv')
@@ -95,4 +100,6 @@ class DataIngestion:
 
 if __name__=="__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
+    data_transformation=DataTransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
