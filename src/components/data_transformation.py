@@ -13,8 +13,6 @@ from src.utils import save_object
 @dataclass
 class DataTransformationConfig:
     preprocessor_obj_file_path=os.path.join('artifacts',"preprocessor.pkl")
-
-
 class DataTransformation:
     def __init__(self):
         self.data_transformation_config=DataTransformationConfig()
@@ -31,8 +29,9 @@ class DataTransformation:
     
 
 
-            num_pipeline=pl(steps=[('imputer',SimpleImputer(strategy='median')),
-                                         ('scaler',StandardScaler())
+            num_pipeline=pl(steps=[
+                ('imputer',SimpleImputer(strategy='median')),
+                 ('scaler',StandardScaler())
                                          ]
                                          )
             cat_pipeline=pl(steps=[
